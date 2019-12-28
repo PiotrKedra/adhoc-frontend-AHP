@@ -3,12 +3,14 @@ import { StyleSheet, Text, View, CheckBox, Button, FlatList, Alert } from 'react
 
 import AddCriteria from './AddCriteria';
 
-export default class CriteriaContainer extends React.Component{
+export default class CriteriaForm extends React.Component{
 
     constructor(props){
         super(props);
+        const { navigation } = this.props;
         this.state = {
             objectives: [{name: '', index: 0}],
+            from: navigation.getParam('objectives', [{name: 'kupa', index: 1}])
         };
     }
 
@@ -43,6 +45,9 @@ export default class CriteriaContainer extends React.Component{
         if(this.state.objectives.length - 1 > index){
             var tmp = this.state.objectives.slice();
             tmp.splice(index, 1);
+            this.print(tmp);
+            //this.renumberIndexes(tmp);
+            this.print(tmp);
             this.setState({objectives: tmp});
         }
         this.setState({refresh: !this.state.refresh})
@@ -59,15 +64,18 @@ export default class CriteriaContainer extends React.Component{
         if(this.state.objectives.length <= 3){
             Alert.alert(
                 "Wrong input",
-                "Please specify at least 3 objectives",
+                "Please specify at least 3 criterias",
               );
         }else{
-            this.props.navigation.navigate('CriteriaForm', {objectives: this.state.objectives})
+            this.props.navigation.navigate('ObjectiveForm', {criterias: this.state.objectives.slice(0, -1), objectives: this.state.from.slice(0, -1)});
         }
     }
 
     render() {
         const {navigate} = this.props.navigation;
+
+        const { navigation } = this.props;
+        const objectives = navigation.getParam('objectives', [{name: 'error', index: 1}]);
 
         return (
             <View
@@ -81,7 +89,7 @@ export default class CriteriaContainer extends React.Component{
                     backgroundColor: '#ecf0f1',
                 }}>
                     <View>
-                        <Text style={{margin: '10%', fontSize: 20, textAlign: 'center'}}>Give your all objectives of the problem</Text>
+                        <Text style={{margin: '10%', fontSize: 20, textAlign: 'center'}}>Write down all your criterias of the problem</Text>
                     </View>
                     <View style={{flex: 1,
                         backgroundColor: '#ecf0f1',
