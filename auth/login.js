@@ -2,11 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput, AsyncStorage } from 'react-native';
 import Toast from 'react-native-simple-toast';
 
+import { StackActions, NavigationActions } from 'react-navigation'
+
 
 export default class Login extends React.Component {
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.144:8080',
+        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         email: '',
         password: '',
         token: 'token',
@@ -39,7 +41,11 @@ export default class Login extends React.Component {
               token: responseJSON.token,
             }, function(){
             });
-            this.props.navigation.navigate('Home');
+            this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                key: null,
+                actions: [NavigationActions.navigate({ routeName: 'Home' })]
+            }))
           })
           .catch((error) =>{
             Toast.show('Given e-mail is wrong. Please register first.');

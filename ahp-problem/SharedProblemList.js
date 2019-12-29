@@ -12,7 +12,7 @@ export default class SharedProblemList extends React.Component {
     token = ''
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.144:8080',
+        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         problems: [],
     }
 

@@ -23,6 +23,7 @@ export default class ProblemProperties extends React.Component {
     }
 
     render(){
+        console.log(JSON.stringify(this.state.ranking))
         return (
             <View style={styles.container}>
                 <Text>Objectives: {this.arrayToString(this.state.objectives)}</Text>

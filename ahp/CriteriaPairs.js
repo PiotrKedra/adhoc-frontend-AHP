@@ -26,6 +26,7 @@ export default class ObjectiveForm extends React.Component{
         sliderValue: 5,
         skipDisabled: false,
         skipedEle: 0,
+        sharing: this.props.navigation.getParam('sharing', false),
     }
 
     initialState = {};
@@ -102,6 +103,8 @@ export default class ObjectiveForm extends React.Component{
                 criterias: this.state.criterias,
                 criteriaPairs: this.state.shit,
                 objectivesPairs: this.state.objectivesPairs,
+                sharing: this.state.sharing,
+                problemID: this.props.navigation.getParam('problemID', 0)
             }
             this.props.navigation.navigate('ObjectivePairs', ahpData);
         }

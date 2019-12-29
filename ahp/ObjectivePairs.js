@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Button, TouchableOpacity, View, Slider, StyleSheet, Alert } from 'react-native';
+import { Text, Button, TouchableOpacity, View, Slider, StyleSheet, Alert, AsyncStorage } from 'react-native';
 
 export default class ObjectivePairs extends React.Component{
 
@@ -8,11 +8,13 @@ export default class ObjectivePairs extends React.Component{
         criterias: this.props.navigation.getParam('criterias', [{name: 'error', index: 1}]),
         criteriaPairs: this.props.navigation.getParam('criteriaPairs', []),
         objectivesPairs: this.props.navigation.getParam('objectivesPairs', []),
+        sharing: this.props.navigation.getParam('sharing', false),
         currentIndex: 0,
         currentCriteriaIndex: 0,
         sliderValue: 5,
         skipDisabled: false,
         skipedElements: 0,
+        SERVER_ADDRESS: 'http://192.168.1.108:8080',
     }
     initialState = {}
     componentDidMount() {
@@ -66,8 +68,76 @@ export default class ObjectivePairs extends React.Component{
                 criteriaPairs: this.state.criteriaPairs,
                 objectivesPairs: this.state.objectivesPairs,
             }
+            console.log(ahpData)
+            if(this.state.sharing == true){
+                this._getToken(ahpData);
+                return;
+            }
             this.props.navigation.navigate('AfterForm', ahpData);
         }
+    }
+
+    _getToken = async (ahpData) => {
+        try {
+            const value = await AsyncStorage.getItem('bearer_token');
+            this.addSubscriberDataToExistingProblem(value, ahpData);
+            return value;        
+        } catch (error) {
+            console.log(error);
+        }
+      };
+
+    addSubscriberDataToExistingProblem = (token, ahpData) =>{
+        var header = new Headers({
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        });
+        var data = this.mapToAhpData(ahpData);
+        var problemID = this.props.navigation.getParam('problemID', 0);
+        var path = this.state.SERVER_ADDRESS + '/problems/' + problemID + '/subscribers/data';
+        fetch(path, {
+            method: 'PUT',
+            headers: header,
+            body: JSON.stringify(data),
+          })
+          .then((responseJSON) => {
+            console.log(responseJSON);
+            this.props.navigation.navigate('SharedProblemProperties');
+          })
+          .catch((error) =>{
+            console.error(error);
+          });
+    }
+
+    mapToAhpData = (ahpData) => {
+        return {
+            objectives: this.renumberIndexes(ahpData.objectives),
+            criteriaList: this.renumberIndexes(ahpData.criterias),
+            criteriaPreferenceMatrix: this.prepareCriteriaPreferenceMatrix(ahpData.criteriaPairs, ahpData.criterias.length),
+            objectiveComparisons: this.prepareObjectiveComparsions(ahpData.objectives.length)
+        }
+    }
+
+    renumberIndexes = (objectives) => {
+        var tmp = objectives.slice();
+        for (let i = 0; i < tmp.length; i++) {
+            tmp[i].index = i;    
+        }
+        return tmp;
+    }
+    
+    prepareObjectiveComparsions = (size) => {
+        var comparsions = [];
+        var objectivePairs = this.state.objectivesPairs.slice();
+        for (let i = 0; i < objectivePairs.length; i++) {
+            var comparsion = {
+                criteriaName: objectivePairs[i].criteria,
+                objectiveComparisonMatrix: this.prepareCriteriaPreferenceMatrix(objectivePairs[i].objectivePairs, size)
+            }
+            comparsions.push(comparsion);
+        }
+        return comparsions;
     }
 
     skipEle = () => {

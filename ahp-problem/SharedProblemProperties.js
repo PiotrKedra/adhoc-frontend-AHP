@@ -5,7 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 export default class SharedProblemProperties extends React.Component {
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.144:8080',
+        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         token: this.props.navigation.getParam('token', ''),
         problemID: this.props.navigation.getParam('problem_id', ''),
         objectives: this.props.navigation.getParam('objectives', []),
@@ -76,7 +76,21 @@ export default class SharedProblemProperties extends React.Component {
     }
 
     getData = () => {
-        console.log("navigate to getin data")
+        data = {
+            sharing: true,
+            objectives: this.prepareObjectives(this.state.objectives),
+            criterias: this.prepareObjectives(this.state.criterias),
+            problemID: this.state.problemID,
+        }
+        this.props.navigation.navigate('ObjectiveForm', data);
+    }
+
+    prepareObjectives(array){
+        var result = []
+        for (let i = 0; i < array.length; i++) {
+            result.push({name: array[i], index: i});
+        }
+        return result;
     }
 
     getIsData(isData){

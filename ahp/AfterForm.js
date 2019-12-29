@@ -13,7 +13,7 @@ export default class AfterForm extends React.Component{
     token = ''
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.144:8080',
+        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         objectives: this.props.navigation.getParam('objectives', [{name: 'error', index: 1}]),
         criterias: this.props.navigation.getParam('criterias', [{name: 'error', index: 1}]),
         criteriaPairs: this.props.navigation.getParam('criteriaPairs', []),
