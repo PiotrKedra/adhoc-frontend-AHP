@@ -1,20 +1,21 @@
 import React from "react";
 import { Text, Button, View, Slider, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
+import styles from '../styles/styles'
+
 export default class ObjectiveForm extends React.Component{
+
+    static navigationOptions = {
+        title: 'Criteria comparsion',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     constructor(props){
     
         super(props);
         const { navigation } = props;
-
-        // const sth = prepareCriteria(navigation.getParam('criterias', [{name: 'error', index: 1}]))
-        // console.log('sth: ' + sth.length);
-        // state = {
-        //     currentIndex: 0,
-        //     objectives: navigation.getParam('objectives', [{name: 'error', index: 1}]),
-        //     criterias: navigation.getParam('criterias', [{name: 'error', index: 1}]),
-        // }
     }
 
     state = {
@@ -158,6 +159,9 @@ export default class ObjectiveForm extends React.Component{
     }
 
     skipEle = () => {
+        if(this.state.skipDisabled == true){
+            return;
+        }
         var skiped = this.state.skipedEle + 1;
         //var maxSkipedEle = Math.floor(this.state.criterias.length*(this.state.criterias.length - 1)/4)
         var maxSkipedEle = this.state.criterias.length - 1;
@@ -172,22 +176,14 @@ export default class ObjectiveForm extends React.Component{
     render() {
         return (
             <View
-                style={{
-                    flex: 1,
-                    width: '100%',
-                    flexDirection: 'column',
-                    color: '#acc',
-                    padding: '5%',
-                    alignContent: 'center',
-                    backgroundColor: '#ecf0f1',
-                }}>
+                style={styles.container}>
                 <View style={{margin: 10}}>
-                    <Text style={{margin: '10%', fontSize: 20, textAlign: 'center'}}>
+                    <Text style={styles.normalBigText}>
                         Which criteria do you prefer and how much
                     </Text>
                 </View>
                 <View style={{flex: 1,
-                        backgroundColor: '#ecf0f1',
+                        backgroundColor: '#eef4fa',
                         width: '100%',
                         height: '50%',
                         flexDirection: 'column',
@@ -196,82 +192,63 @@ export default class ObjectiveForm extends React.Component{
                         alignContent: 'center'
                         }}>
                     <View style={{flex: 1,
-                        backgroundColor: '#ecf0f1',
+                        backgroundColor: '#eef4fa',
                         width: '100%',
-                        // height: '50%',
                         flexDirection: 'column',
                         marginBottom: 60,
                         justifyContent: 'center',
                         alignContent: 'center'}}
                         >
                         <TouchableOpacity 
-                            style={{
-                                alignItems: 'center',
-                                backgroundColor: '#2C5197',
-                                padding: 10,
-                                margin: 10,
-                                //width: '80%',
-                            }} 
+                            style={styles.objectiveComparsionButton} 
                             onPress={()=> this.addValue(1)}
                             >
-                            <Text style={{fontSize:20, fontWeight: 'bold', color: 'white'}}>
+                            <Text style={styles.homeTextBig}>
                                 {this.state.shit[this.state.currentIndex].arg1.name}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            style={{
-                                alignItems: 'center',
-                                backgroundColor: '#2C5197',
-                                padding: 10,
-                                margin: 10,
-                                //width: '80%',
-                            }} 
+                            style={styles.objectiveComparsionButton} 
                              onPress={()=> this.addValue(2)}>
-                            <Text style={{fontSize:20, fontWeight: 'bold', color: 'white'}}>
+                            <Text style={styles.homeTextBig}>
                                 {this.state.shit[this.state.currentIndex].arg2.name}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.container}>
                         <Slider
-                            style={{ width: '80%', transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]}}
+                            style={{ width: '90%', transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]}}
                             step={2}
                             minimumValue={1}
                             maximumValue={9}
                             value={this.state.sliderValue}
                             onSlidingComplete={(val)=>this.setState({sliderValue: val})}
-                            thumbTintColor='#2C5197'
-                            maximumTrackTintColor='#d3d3d3' 
-                            minimumTrackTintColor='#2C5197'
+                            thumbTintColor='#398ad7'
+                            maximumTrackTintColor='#398ad7' 
+                            minimumTrackTintColor='#398ad7'
                         />
-                        <View style={styles.textCon}>
-                            <Text style={styles.textSlider}>1</Text>
-                            <Text style={styles.textSlider}>5</Text>
-                            <Text style={styles.textSlider}>9</Text>
+                        <View style={localStyles.sliderTextContainer}>
+                            <Text style={localStyles.textSlider}>1</Text>
+                            <Text style={localStyles.textSlider}>5</Text>
+                            <Text style={localStyles.textSlider}>9</Text>
                         </View>
                     </View>
                 </View>
-                <Button title="skip" onPress={this.skipEle} disabled={this.state.skipDisabled}/>
+                <TouchableOpacity style={this.state.skipDisabled ? styles.buttonDisabled : styles.button} onPress={this.skipEle}>
+                    <Text style={styles.buttonText}>Skip</Text>
+                </TouchableOpacity>
             </View>
         )
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '5%'
-    },
-    textCon: {
-        width: 320,
+const localStyles = StyleSheet.create({
+    sliderTextContainer: {
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     textSlider: {
-        color: '#2C5197',
-        marginLeft: 20,
-        marginRight: 20,
+        color: '#398ad7',
     }
 });

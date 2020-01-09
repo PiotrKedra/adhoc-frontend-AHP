@@ -1,8 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, AsyncStorage } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
+import styles from '../styles/styles'
+
 export default class SharedProblemList extends React.Component {
+
+    static navigationOptions = {
+        title: 'Shared with you',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     constructor(props){
         super(props);
@@ -113,18 +122,19 @@ export default class SharedProblemList extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <Text>Your Problems</Text>
                 <FlatList
-                    style={{flex: 1}}
+                    style={{flex: 1, width:'100%'}}
                     data={this.state.problems}
                     renderItem={item => 
-                        <View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity 
+                            style={{flexDirection: 'row', borderBottomWidth: 1, width:'100%'}}
+                            onPress={() => {this.getRanking(item.item.id)}}
+                            >
                             <View style={{flexDirection: 'column'}}>
-                                <Text>Objectives: {this.arrayToString(item.item.objectives)}</Text>
-                                <Text>Criterias: {this.arrayToString(item.item.criterias)}</Text>
+                                <Text style={styles.homeTextBigBlack}>Objectives: {this.arrayToString(item.item.objectives)}</Text>
+                                <Text style={styles.homeTextBigBlack}>Criterias: {this.arrayToString(item.item.criterias)}</Text>
                             </View>
-                            <Button title="Get ranking" onPress={() => this.getRanking(item.item.id)}/>
-                        </View>
+                        </TouchableOpacity>
                     }
                     extraData={this.state}
                     keyExtractor={(item) => item.id.toString()}
@@ -133,21 +143,3 @@ export default class SharedProblemList extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ecf0f1',
-        padding: 15,
-        alignItems: 'center',
-    },
-    button: {
-        backgroundColor: '#b0d5d0',
-        borderColor: 'white',
-        borderWidth: 2,
-        borderRadius: 12,
-        overflow: 'hidden',
-        padding: 12,
-        textAlign:'center',
-    }
-});

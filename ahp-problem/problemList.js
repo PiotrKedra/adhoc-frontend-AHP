@@ -1,8 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Button, AsyncStorage, TouchableOpacity  } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
+import styles from '../styles/styles'
+
 export default class ProblemList extends React.Component {
+
+    static navigationOptions = {
+        title: 'Your problems',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     constructor(props){
         super(props);
@@ -58,13 +67,14 @@ export default class ProblemList extends React.Component {
             string = string + array[i] + ', '
         }
         var result = string.slice(0, string.length - 2);
-        if(result.length >= 15){
-            return result.substring(0, 13) + '...';
+        if(result.length >= 25){
+            return result.substring(0, 23) + '...';
         }
         return result;
     }
 
     getRanking = (id) => {
+        console.log(id);
         var header = new Headers({
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + this.token._55,
@@ -82,6 +92,7 @@ export default class ProblemList extends React.Component {
                 ranking: responseJSON,
                 objectives: this.getObjectivesByID(id),
                 criterias: this.getCriteriasByID(id),
+                problemID: id
             }
 
             this.props.navigation.navigate('ProblemProperties', data);
@@ -112,18 +123,19 @@ export default class ProblemList extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <Text>Your Problems</Text>
                 <FlatList
-                    style={{flex: 1}}
+                    style={{flex: 1, width:'100%'}}
                     data={this.state.problems}
                     renderItem={item => 
-                        <View style={{flexDirection: 'row'}}>
-                            <View style={{flexDirection: 'column'}}>
-                                <Text>Objectives: {this.arrayToString(item.item.objectives)}</Text>
-                                <Text>Criterias: {this.arrayToString(item.item.criterias)}</Text>
+                        <TouchableOpacity 
+                            style={{flexDirection: 'row', borderBottomWidth: 1, width:'100%'}}
+                            onPress={() => {this.getRanking(item.item.id)}}
+                            >
+                            <View style={{flexDirection: 'column', width: '100%'}}>
+                                <Text style={styles.homeTextBigBlack}>{this.arrayToString(item.item.objectives)}</Text>
+                                <Text style={styles.homeTextSmallBlack}>Criterias: {this.arrayToString(item.item.criterias)}</Text>
                             </View>
-                            <Button title="Get ranking" onPress={() => this.getRanking(item.item.id)}/>
-                        </View>
+                        </TouchableOpacity >
                     }
                     extraData={this.state}
                     keyExtractor={(item) => item.id.toString()}
@@ -132,21 +144,3 @@ export default class ProblemList extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ecf0f1',
-        padding: 15,
-        alignItems: 'center',
-    },
-    button: {
-        backgroundColor: '#b0d5d0',
-        borderColor: 'white',
-        borderWidth: 2,
-        borderRadius: 12,
-        overflow: 'hidden',
-        padding: 12,
-        textAlign:'center',
-    }
-});

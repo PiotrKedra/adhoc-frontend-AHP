@@ -1,7 +1,16 @@
 import React from "react";
 import { Text, Button, TouchableOpacity, View, Slider, StyleSheet, Alert, AsyncStorage } from 'react-native';
 
+import styles from '../styles/styles'
+
 export default class ObjectivePairs extends React.Component{
+
+    static navigationOptions = {
+        title: 'Objectives comparsion',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     state = {
         objectives: this.props.navigation.getParam('objectives', [{name: 'error', index: 1}]),
@@ -103,7 +112,7 @@ export default class ObjectivePairs extends React.Component{
           })
           .then((responseJSON) => {
             console.log(responseJSON);
-            this.props.navigation.navigate('SharedProblemProperties');
+            this.props.navigation.navigate('SharedProblemList');
           })
           .catch((error) =>{
             console.error(error);
@@ -141,6 +150,9 @@ export default class ObjectivePairs extends React.Component{
     }
 
     skipEle = () => {
+        if(this.state.skipDisabled == true){
+            return;
+        }
         var skiped = this.state.skipedElements + 1;
         //var maxSkipedEle = Math.floor(this.state.objectives.length*(this.state.objectives.length-1)/4)
         var maxSkipedEle = Math.round(this.state.objectives.length/2);
@@ -212,22 +224,14 @@ export default class ObjectivePairs extends React.Component{
     render(){
         return(
             <View
-                style={{
-                    flex: 1,
-                    width: '100%',
-                    flexDirection: 'column',
-                    color: '#acc',
-                    padding: '5%',
-                    alignContent: 'center',
-                    backgroundColor: '#ecf0f1',
-                }}>
+                style={styles.container}>
                 <View style={{margin: 10}}>
-                    <Text style={{margin: '10%', fontSize: 20, textAlign: 'center'}}>
+                    <Text style={styles.normalBigText}>
                         Base on '{this.state.objectivesPairs[this.state.currentCriteriaIndex].criteria}' criteria specify which objective is better
                     </Text>
                 </View>
                 <View style={{flex: 1,
-                        backgroundColor: '#ecf0f1',
+                        backgroundColor: '#eef4fa',
                         width: '100%',
                         height: '50%',
                         flexDirection: 'column',
@@ -236,22 +240,15 @@ export default class ObjectivePairs extends React.Component{
                         alignContent: 'center'
                         }}>
                     <View style={{flex: 1,
-                        backgroundColor: '#ecf0f1',
+                        backgroundColor: '#eef4fa',
                         width: '100%',
-                        // height: '50%',
                         flexDirection: 'column',
                         marginBottom: 60,
                         justifyContent: 'center',
                         alignContent: 'center'}}
                         >
                         <TouchableOpacity 
-                            style={{
-                                alignItems: 'center',
-                                backgroundColor: '#2C5197',
-                                padding: 10,
-                                margin: 10,
-                                //width: '80%',
-                            }} 
+                            style={styles.objectiveComparsionButton} 
                             onPress={()=> this.addValue(1)}
                             >
                             <Text style={{fontSize:20, fontWeight: 'bold', color: 'white'}}>
@@ -259,13 +256,7 @@ export default class ObjectivePairs extends React.Component{
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            style={{
-                                alignItems: 'center',
-                                backgroundColor: '#2C5197',
-                                padding: 10,
-                                margin: 10,
-                                //width: '80%',
-                            }} 
+                            style={styles.objectiveComparsionButton} 
                              onPress={()=> this.addValue(2)}>
                             <Text style={{fontSize:20, fontWeight: 'bold', color: 'white'}}>
                                 {this.state.objectivesPairs[this.state.currentCriteriaIndex].objectivePairs[this.state.currentIndex].arg2.name}
@@ -274,45 +265,39 @@ export default class ObjectivePairs extends React.Component{
                     </View>
                     <View style={styles.container}>
                         <Slider
-                            style={{ width: '80%', transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]}}
+                            style={{ width: '90%', transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]}}
                             step={2}
                             minimumValue={1}
                             maximumValue={9}
                             value={this.state.sliderValue}
                             onSlidingComplete={(val)=>this.setState({sliderValue: val})}
-                            thumbTintColor='#2C5197'
-                            maximumTrackTintColor='#d3d3d3' 
-                            minimumTrackTintColor='#2C5197'
+                            thumbTintColor='#398ad7'
+                            maximumTrackTintColor='#398ad7' 
+                            minimumTrackTintColor='#398ad7'
                         />
-                        <View style={styles.textCon}>
-                            <Text style={styles.textSlider}>1</Text>
-                            <Text style={styles.textSlider}>5</Text>
-                            <Text style={styles.textSlider}>9</Text>
+                        <View style={localStyles.sliderTextContainer}>
+                            <Text style={localStyles.textSlider}>1</Text>
+                            <Text style={localStyles.textSlider}>5</Text>
+                            <Text style={localStyles.textSlider}>9</Text>
                         </View>
                     </View>
                 </View>
-                <Button title="Skip" disabled={this.state.skipDisabled} onPress={this.skipEle}/>
+                <TouchableOpacity style={this.state.skipDisabled ? styles.buttonDisabled : styles.button} onPress={this.skipEle}>
+                    <Text style={styles.buttonText}>Skip</Text>
+                </TouchableOpacity>
             </View>
         );
     }
 }
 
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '5%'
-    },
-    textCon: {
-        width: 320,
+const localStyles = StyleSheet.create({
+    sliderTextContainer: {
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     textSlider: {
-        color: '#2C5197',
-        marginLeft: 20,
-        marginRight: 20,
+        color: '#398ad7',
     }
 });

@@ -1,18 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-simple-toast';
 
 import { StackActions, NavigationActions } from 'react-navigation'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
+import styles from '../styles/styles'
 
 export default class Login extends React.Component {
 
+    static navigationOptions = {
+        title: 'Login',
+        headerTransparent: true,
+        headerLeft: null,
+        headerTitleStyle: styles.headerTitle,
+        headerStyle: styles.header,
+    };
+
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         email: '',
         password: '',
         token: 'token',
-        isLoading: false
+        loginFocus: false,
+        passwordFocus: false,
     }
 
     login = () => {
@@ -21,7 +32,7 @@ export default class Login extends React.Component {
             email: this.state.email,
             password: this.state.password
         }
-        fetch(this.state.SERVER_ADDRESS + '/auth/token', {
+        fetch(SERVER_ADDRESS + '/auth/token', {
             method: 'POST',
             headers: {
                     Accept: 'application/json',
@@ -64,36 +75,38 @@ export default class Login extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <TextInput
-                    value={this.state.email}
-                    onChangeText={(text) => this.setState({email: text})}
-                    placeholder='Your email'
-                />
-                <TextInput
-                    value={this.state.password}
-                    onChangeText={(text) => this.setState({password: text})}
-                    placeholder='Password'
-                />
-                <Button style={{margin: 50}} title="Login" onPress={this.login}/>
+                <View style={styles.formContainer}>
+                    <View style={{width: '88%'}}>
+                        <Text style={styles.formText}>E-mail:</Text>
+                    </View>
+                    <TextInput
+                        style={this.state.loginFocus ? styles.authTextInputOnFocus : styles.authTextInput}
+                        value={this.state.email}
+                        onChangeText={(text) => this.setState({email: text})}
+                        onFocus={() => this.setState({loginFocus: true})}
+                        onEndEditing={() => this.setState({loginFocus: false})}
+                    />
+                </View>
+                <View style={styles.formContainer}>
+                    <View style={{width: '88%'}}>
+                        <Text style={styles.formText}>Password:</Text>
+                    </View>
+                    <TextInput
+                        secureTextEntry={true}
+                        style={this.state.passwordFocus ? styles.authTextInputOnFocus : styles.authTextInput}
+                        value={this.state.password}
+                        onChangeText={(text) => this.setState({password: text})}
+                        onFocus={() => this.setState({passwordFocus: true})}
+                        onEndEditing={() => this.setState({passwordFocus: false})}
+                    />
+                </View>
+                <View style={styles.formContainer}>
+                    <TouchableOpacity style={styles.button} onPress={this.login}>
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{height: '20%'}}></View>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ecf0f1',
-        padding: 30,
-        alignItems: 'center',
-    },
-    button: {
-        backgroundColor: '#b0d5d0',
-        borderColor: 'white',
-        borderWidth: 2,
-        borderRadius: 12,
-        overflow: 'hidden',
-        padding: 12,
-        textAlign:'center',
-    }
-});

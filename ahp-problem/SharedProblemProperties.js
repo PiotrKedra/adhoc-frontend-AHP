@@ -1,8 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
+import styles from '../styles/styles'
+
 export default class SharedProblemProperties extends React.Component {
+
+    static navigationOptions = {
+        title: 'Shared problem properties',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     state = {
         SERVER_ADDRESS: 'http://192.168.1.108:8080',
@@ -17,6 +26,7 @@ export default class SharedProblemProperties extends React.Component {
 
     componentDidMount = () => {
         this.getSubscribers();
+        this.getRanking();
     }
 
     arrayToString(array){
@@ -25,9 +35,6 @@ export default class SharedProblemProperties extends React.Component {
             string = string + array[i] + ', '
         }
         var result = string.slice(0, string.length - 2);
-        if(result.length >= 15){
-            return result.substring(0, 13) + '...';
-        }
         return result;
     }
 
@@ -103,53 +110,40 @@ export default class SharedProblemProperties extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <Text>Objectives: {this.arrayToString(this.state.objectives)}</Text>
-                <Text>Criterias: {this.arrayToString(this.state.criterias)}</Text>
-                <View style={{height: '30%'}}>
-                    <Text>Subscribers of Problem</Text>
+                <View style={{width: '100%', height: '40%', borderBottomWidth: 1}}>
+                    <Text style={styles.homeTextBigBlack}>Current ranking:</Text>
+                    <View style={{marginTop: 20}}>
+                        <FlatList
+                            data={this.state.ranking}
+                            renderItem={(item) =>
+                                <Text style={{fontSize: 20, textAlign: 'center'}}>
+                                    {item.index + 1}. {item.item.objectiveName} ({item.item.value.toFixed(2)}) 
+                                </Text>
+                            }
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </View>
+                </View>
+                <View style={{width: '100%', height: '20%', borderBottomWidth: 1}}>
+                    <Text style={styles.homeTextBigBlack}>Objectives: {this.arrayToString(this.state.objectives)}</Text>
+                    <Text style={styles.homeTextBigBlack}>Criterias: {this.arrayToString(this.state.criterias)}</Text>
+                </View>
+                <View style={{width: '100%', height: '30%'}}>
+                    <Text style={styles.homeTextBigBlack}>Subscribers of Problem</Text>
                     <FlatList
                         data={this.state.subscribers}
                         renderItem={(item) => 
                             <View>
-                                <Text>{item.item.email}</Text>
-                                <Text>{this.getIsData(item.item.data)}</Text>
+                                <Text style={styles.homeTextSmallBlack}>{item.item.email}: {this.getIsData(item.item.data)}</Text>
                             </View>
                         }
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </View>
-                <View>
-                    <Button title="Give data" onPress={this.getData}/>
-                    <Button title="Get Ranking" onPress={this.getRanking}/>
-                </View>
-                <FlatList
-                    data={this.state.ranking}
-                    renderItem={(item) =>
-                        <Text style={{fontSize: 20, textAlign: 'center'}}>
-                            {item.index + 1}. {item.item.objectiveName} ({item.item.value.toFixed(2)}) 
-                        </Text>
-                    }
-                    keyExtractor={(item, index) => index.toString()}
-                />
+                <TouchableOpacity style={styles.button} onPress={this.getData}>
+                    <Text style={styles.buttonText}>Give data</Text>
+                </TouchableOpacity>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ecf0f1',
-        padding: 15,
-        alignItems: 'center',
-    },
-    button: {
-        backgroundColor: '#b0d5d0',
-        borderColor: 'white',
-        borderWidth: 2,
-        borderRadius: 12,
-        overflow: 'hidden',
-        padding: 12,
-        textAlign:'center',
-    }
-});

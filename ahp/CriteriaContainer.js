@@ -1,9 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, CheckBox, Button, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, View, CheckBox, Button, FlatList, Alert, TouchableOpacity } from 'react-native';
 
 import AddCriteria from './AddCriteria';
+import styles from '../styles/styles'
+
 
 export default class CriteriaContainer extends React.Component{
+
+    static navigationOptions = {
+        title: 'Objective definition',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     constructor(props){
         super(props);
@@ -13,8 +22,6 @@ export default class CriteriaContainer extends React.Component{
     }
 
     updateList = (index, value) => {
-        console.log("--------update-------" + value);
-        console.log(value);
         this.print(this.state.objectives)
         const newArray = this.state.objectives.slice();
         for (let i = 0; i < newArray.length; i++) {
@@ -71,24 +78,11 @@ export default class CriteriaContainer extends React.Component{
 
         return (
             <View
-                style={{
-                    flex: 1,
-                    width: '100%',
-                    flexDirection: 'column',
-                    color: '#acc',
-                    padding: '5%',
-                    alignContent: 'center',
-                    backgroundColor: '#ecf0f1',
-                }}>
+                style={styles.objectivesContainer}>
                     <View>
-                        <Text style={{margin: '10%', fontSize: 20, textAlign: 'center'}}>Give your all objectives of the problem</Text>
+                        <Text style={styles.normalBigText}>Give your all objectives of the problem</Text>
                     </View>
-                    <View style={{flex: 1,
-                        backgroundColor: '#ecf0f1',
-                        width: '100%',
-                        height: '50%',
-                        flexDirection: 'row',
-                        marginBottom: 60}}>
+                    <View style={styles.objectivesList}>
                     <FlatList
                         style = {{ flex: 1}}
                         data={this.state.objectives}
@@ -105,21 +99,10 @@ export default class CriteriaContainer extends React.Component{
                     >
                     </FlatList>
                     </View>
-                    <Button style={{margin: 50}} title="Submit" onPress={this.submit}/>
+                    <TouchableOpacity style={styles.button} onPress={this.submit}>
+                        <Text style={styles.buttonText}>Submit</Text>
+                    </TouchableOpacity>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ecf0f1',
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        // paddingRight: 10,
-        // paddingBottom: 5,
-        // paddingTop: 5,
-    },
-});

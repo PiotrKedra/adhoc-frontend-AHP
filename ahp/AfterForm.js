@@ -1,9 +1,17 @@
 import React from "react";
-import { Text, Button, View, FlatList, StyleSheet, AsyncStorage } from 'react-native';
+import { Text, Button, View, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
 
 import AddCriteria from './AddCriteria';
+import styles from '../styles/styles'
 
 export default class AfterForm extends React.Component{
+
+    static navigationOptions = {
+        title: 'Problem - Ranking',
+        headerTitleStyle: styles.normalHeaderTitle,
+        headerStyle: styles.homeHeader,
+        headerTintColor: '#fdfeff'
+    };
 
     constructor(props){
         super(props);
@@ -23,7 +31,7 @@ export default class AfterForm extends React.Component{
         savedProblem: {}
     }
 
-    getRanking(){
+    getRanking = () => {
         const ahpData = this.mapToAhpData();
         console.log(ahpData);
         console.log('fetching:')
@@ -190,31 +198,22 @@ export default class AfterForm extends React.Component{
 
     render(){
         if(this.state.isLoading==false){
-            
             return(
-                <View style={{flex: 1,
-                        backgroundColor: '#ecf0f1',
-                        width: '100%',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
+                <View style={styles.container}>
                     <View style={{margin: 10}}>
-                        <Text style={{margin: '10%', fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>
+                        <Text style={styles.normalBigText}>
                             {JSON.stringify(this.state.dataSource[0].objectiveName)} is a best option!
                         </Text>
                     </View>
                     <View style={{
                          width: '100%',
-                         height: '60%',
                          margin: 40,
-                         alignContent: 'center',
                          justifyContent: 'center',
                     }}>
                         <FlatList
                             data={this.state.dataSource}
                             renderItem={(item) =>
-                                <Text style={{fontSize: 20, textAlign: 'center'}}>
+                                <Text style={styles.normalBigTextWithoutMargin}>
                                     {item.index + 1}. {item.item.objectiveName} ({item.item.value.toFixed(2)}) 
                                 </Text>
                             }
@@ -226,16 +225,17 @@ export default class AfterForm extends React.Component{
         }
         return(
             <View style={styles.container}>
-                <Text style={styles.text}>You can get a ranking now</Text>
-                <Button title="Get Ranking" onPress={() => this.getRanking()}/>
-                {/* <Text>{JSON.stringify(this.getRanking())}</Text> */}
-                <Text style={styles.text}>Or you can share your prablem with others, and get ranking when they fill the data.</Text>
+                <Text style={styles.normalBigText}>You can get a ranking now</Text>
+                <TouchableOpacity style={styles.button} onPress={this.getRanking}>
+                    <Text style={styles.buttonText}>Get Ranking</Text>
+                </TouchableOpacity>
+                <Text style={styles.normalBigText}>Or you can share your problem with others, and get ranking when they fill the data.</Text>
                 <View style={{flex: 1,
                         backgroundColor: '#ecf0f1',
                         width: '100%',
                         height: '50%',
                         flexDirection: 'row',
-                        marginBottom: 60}}>
+                        marginBottom: 30}}>
                     <FlatList
                             style = {{ flex: 1}}
                             data={this.state.emails}
@@ -250,32 +250,10 @@ export default class AfterForm extends React.Component{
                             keyExtractor={(item) => item.index.toString()}
                         />
                 </View>
-                <Button title="Share problem" onPress={() => this.shareProblem()}/>
+                <TouchableOpacity style={styles.button} onPress={this.shareProblem}>
+                    <Text style={styles.buttonText}>Share problem</Text>
+                </TouchableOpacity>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ecf0f1',
-        padding: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    button: {
-        backgroundColor: '#b0d5d0',
-        borderColor: 'white',
-        borderWidth: 2,
-        borderRadius: 12,
-        overflow: 'hidden',
-        padding: 12,
-        textAlign:'center',
-    },
-    text: {
-        margin: '10%',
-        fontSize: 20, 
-        textAlign: 'center'
-    }
-});

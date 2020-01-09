@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, CheckBox, Button, FlatList, TextInput } from 'react-native';
+import { StyleSheet, Text, View, CheckBox, Button, TouchableOpacity, TextInput } from 'react-native';
+
+import styles from '../styles/styles'
 
 export default class AddCriteria extends React.Component {
 
@@ -13,31 +15,29 @@ export default class AddCriteria extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={loclaStyles.container}>
                 <TextInput
-                    style={styles.input}
+                    style={loclaStyles.input}
                     value={this.state.objective}
                     onChangeText={(text) => this.setState({objective: text})}
                     placeholder='Your value'
                     onEndEditing={() => this.props.updateList(this.props.index, this.state.objective)}
                 />
-                {/* <Text>i:{this.props.index} v:{this.props.objective}</Text> */}
-                <Button title="X" onPress={() => this.props.deleteObjective(this.props.index)}/>
+                <TouchableOpacity style={styles.removeButton} onPress={() => this.props.deleteObjective(this.props.index)}>
+                    <Text style={styles.buttonText}>X</Text>
+                </TouchableOpacity>
             </View>
         )
     }
 }
 
-const styles = StyleSheet.create({
+const loclaStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ecf0f1',
+        backgroundColor: '#eef4fa',
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        // paddingRight: 10,
-        // paddingBottom: 5,
-        // paddingTop: 5,
     },
     input: {
         flex: 1,
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 4,
         borderColor: '#ccc',
-        //borderWidth: 1,
         borderBottomWidth: 1,
         fontSize: 16,
     },

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity  } from 'react-native';
 
+import styles from '../styles/styles'
 
 export default class AuthHome extends React.Component {
 
@@ -12,11 +13,9 @@ export default class AuthHome extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.headerText}>Welcome to Ad-Hoc</Text>
-                <View style={{padding: 5}}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text style={styles.buttonText}>Login in</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Login')}>
+                    <Text style={styles.buttonText}>Login in</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.registerButton} onPress={() => this.props.navigation.navigate('Register')}>
                     <Text style={styles.registerButtonText}>Register</Text>
                 </TouchableOpacity>
@@ -26,11 +25,11 @@ export default class AuthHome extends React.Component {
 }
 
 
-const styles = StyleSheet.create({
+const a = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#eef4fa',
-        padding: 30,
+        padding: 35,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -55,6 +54,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         padding: 8,
         textAlign:'center',
+        margin: 3
     },
     registerButton: {
         backgroundColor: '#abceee',
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         padding: 8,
         textAlign:'center',
+        margin: 3
     },
     registerButtonText: {
         textAlign: 'center', 
