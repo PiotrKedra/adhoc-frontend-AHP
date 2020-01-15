@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, AsyncStorage } from 'r
 
 import styles from '../styles/styles'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
+
 export default class Home extends React.Component {
 
     constructor(props){
@@ -11,7 +14,6 @@ export default class Home extends React.Component {
     }
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         userName: ''
     }
 
@@ -26,7 +28,7 @@ export default class Home extends React.Component {
 
     getUserName = async (token) => {
         try {
-            const response = await fetch(this.state.SERVER_ADDRESS + '/users/me', {
+            const response = await fetch(SERVER_ADDRESS + '/users/me', {
                 method: 'GET',
                 headers: new Headers({
                     'Accept': 'application/json',

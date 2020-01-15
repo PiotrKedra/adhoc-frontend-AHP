@@ -32,6 +32,8 @@ export default class Login extends React.Component {
             email: this.state.email,
             password: this.state.password
         }
+        console.log(user)
+
         fetch(SERVER_ADDRESS + '/auth/token', {
             method: 'POST',
             headers: {
@@ -42,6 +44,7 @@ export default class Login extends React.Component {
           })
           .then((response) => response.json())
           .then((responseJSON) => {
+            console.log(responseJSON)
             if(typeof responseJSON.token === 'undefined'){
                 Toast.show(responseJSON.message);
                 return;

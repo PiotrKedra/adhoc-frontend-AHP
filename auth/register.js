@@ -4,6 +4,8 @@ import Toast from 'react-native-simple-toast';
 
 import styles from '../styles/styles'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
 export default class Register extends React.Component {
 
     static navigationOptions = {
@@ -15,7 +17,6 @@ export default class Register extends React.Component {
     };
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         name: '',
         email: '',
         password: '',
@@ -32,7 +33,7 @@ export default class Register extends React.Component {
             email: this.state.email,
             password: this.state.password
         }
-        fetch(this.state.SERVER_ADDRESS + '/auth', {
+        fetch(SERVER_ADDRESS + '/auth', {
             method: 'POST',
             headers: {
                     Accept: 'application/json',

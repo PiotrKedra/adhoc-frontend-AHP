@@ -4,6 +4,8 @@ import { Text, Button, View, FlatList, TouchableOpacity, AsyncStorage } from 're
 import AddCriteria from './AddCriteria';
 import styles from '../styles/styles'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
 export default class AfterForm extends React.Component{
 
     static navigationOptions = {
@@ -21,7 +23,6 @@ export default class AfterForm extends React.Component{
     token = ''
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         objectives: this.props.navigation.getParam('objectives', [{name: 'error', index: 1}]),
         criterias: this.props.navigation.getParam('criterias', [{name: 'error', index: 1}]),
         criteriaPairs: this.props.navigation.getParam('criteriaPairs', []),
@@ -36,7 +37,7 @@ export default class AfterForm extends React.Component{
         console.log(ahpData);
         console.log('fetching:')
         console.log(this.token._55);
-        return fetch(this.state.SERVER_ADDRESS + '/ranking', {
+        return fetch(SERVER_ADDRESS + '/ranking', {
             method: 'POST',
             headers: new Headers({
                 'Accept': 'application/json',
@@ -164,7 +165,7 @@ export default class AfterForm extends React.Component{
             ahpProblemData: ahpData,
             emails: this.getEmails()
         }
-        return fetch(this.state.SERVER_ADDRESS + '/problems/share', {
+        return fetch(SERVER_ADDRESS + '/problems/share', {
             method: 'POST',
             headers: new Headers({
                 'Accept': 'application/json',
@@ -220,6 +221,9 @@ export default class AfterForm extends React.Component{
                             keyExtractor={(item, index) => index.toString()}
                         />
                     </View>
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.popToTop()}>
+                        <Text style={styles.buttonText}>Back to menu</Text>
+                    </TouchableOpacity>
                 </View>
               );
         }

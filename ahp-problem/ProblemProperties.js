@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, FlatList } fro
 
 import styles from '../styles/styles'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
+
 export default class ProblemProperties extends React.Component {
 
     static navigationOptions = {
@@ -13,7 +16,6 @@ export default class ProblemProperties extends React.Component {
     };
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         objectives: this.props.navigation.getParam('objectives', []),
         criterias: this.props.navigation.getParam('criterias', []),
         ranking: this.props.navigation.getParam('ranking', []),
@@ -49,7 +51,7 @@ export default class ProblemProperties extends React.Component {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json',
         });
-        var path = this.state.SERVER_ADDRESS + '/problems/' + this.state.problemID  + '/subscribers';
+        var path = SERVER_ADDRESS + '/problems/' + this.state.problemID  + '/subscribers';
         console.log(path);
         fetch(path, {
             method: 'GET',

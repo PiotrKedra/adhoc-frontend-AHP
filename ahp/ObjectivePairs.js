@@ -3,6 +3,9 @@ import { Text, Button, TouchableOpacity, View, Slider, StyleSheet, Alert, AsyncS
 
 import styles from '../styles/styles'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
+
 export default class ObjectivePairs extends React.Component{
 
     static navigationOptions = {
@@ -23,7 +26,6 @@ export default class ObjectivePairs extends React.Component{
         sliderValue: 5,
         skipDisabled: false,
         skipedElements: 0,
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
     }
     initialState = {}
     componentDidMount() {
@@ -104,7 +106,7 @@ export default class ObjectivePairs extends React.Component{
         });
         var data = this.mapToAhpData(ahpData);
         var problemID = this.props.navigation.getParam('problemID', 0);
-        var path = this.state.SERVER_ADDRESS + '/problems/' + problemID + '/subscribers/data';
+        var path = SERVER_ADDRESS + '/problems/' + problemID + '/subscribers/data';
         fetch(path, {
             method: 'PUT',
             headers: header,

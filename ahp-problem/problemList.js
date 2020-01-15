@@ -4,6 +4,9 @@ import { FlatList } from 'react-native-gesture-handler';
 
 import styles from '../styles/styles'
 
+import SERVER_ADDRESS from '../config/ServerConfig'
+
+
 export default class ProblemList extends React.Component {
 
     static navigationOptions = {
@@ -21,7 +24,6 @@ export default class ProblemList extends React.Component {
     token = ''
 
     state = {
-        SERVER_ADDRESS: 'http://192.168.1.108:8080',
         problems: [],
     }
 
@@ -32,7 +34,7 @@ export default class ProblemList extends React.Component {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json',
         });
-        fetch(this.state.SERVER_ADDRESS + '/problems', {
+        fetch(SERVER_ADDRESS + '/problems', {
             method: 'GET',
             headers: header,
           })
@@ -80,7 +82,7 @@ export default class ProblemList extends React.Component {
             'Authorization': 'Bearer ' + this.token._55,
             'Content-Type': 'application/json',
         });
-        var path = this.state.SERVER_ADDRESS + '/problem/' + id + '/ranking';
+        var path = SERVER_ADDRESS + '/problem/' + id + '/ranking';
         fetch(path, {
             method: 'GET',
             headers: header,
