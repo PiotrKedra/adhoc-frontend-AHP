@@ -14,7 +14,7 @@ After you have your backend and DB running, you can launch frontend.
 
 <br/>
 
-Project is using [expo](https://expo.io/) and [npm](https://nodejs.org/en/download/), so to run it on your mobile you need to install expo app ([android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_US)or [iOS](https://apps.apple.com/us/app/expo-client/id982107779)). 
+Project is using [expo](https://expo.io/) and [npm](https://nodejs.org/en/download/), so to run it on your mobile you need to install expo app ([android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_US) or [iOS](https://apps.apple.com/us/app/expo-client/id982107779)). 
 In: 
 ```bash
 config/ServerConfig.js
