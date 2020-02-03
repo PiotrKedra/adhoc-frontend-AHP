@@ -5,7 +5,31 @@ From this repo you can get frontend clinet written in react native and expo. Bac
 To mention this project was created as my engineering thesis.
 
 # How to run
+ 
+First you have to run [backend server](https://github.com/PiotrKedra/adhoc-backend). You have to configure database source (I used PostgreSQL) located at backend project: 
+```bash
+src/main/resources/application.properties
+```
+After you have your backend and DB running, you can launch frontend.
 
+<br/>
+
+Project is using [expo](https://expo.io/) and [npm](https://nodejs.org/en/download/), so to run it on your mobile you need to install expo app ([android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_US)or [iOS](https://apps.apple.com/us/app/expo-client/id982107779)). 
+In: 
+```bash
+src/main/resources/application.properties
+```
+you have to put path to your server.
+Then you can run the app using the command (you have to be in the main directory of the project):
+```bash
+npm start
+```
+You also might need to install package that I used. You do it using this command:
+```bash
+npm install --save [package name]
+```
+
+To run app on your device you have to scan the QR code with expo app which will appear after starting the project.
 
 # About the app
 
